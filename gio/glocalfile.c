@@ -98,7 +98,7 @@
 static void g_local_file_file_iface_init (GFileIface *iface);
 
 static GFileAttributeInfoList *local_writable_attributes = NULL;
-static /* GFileAttributeInfoList * */ gsize local_writable_namespaces = 0;
+static /* GFileAttributeInfoList * */ guintptr local_writable_namespaces = 0;
 
 struct _GLocalFile
 {
@@ -1290,7 +1290,7 @@ g_local_file_query_writable_namespaces (GFile         *file,
       if (class->add_writable_namespaces)
 	class->add_writable_namespaces (vfs, list);
 
-      g_once_init_leave (&local_writable_namespaces, (gsize)list);
+      g_once_init_leave (&local_writable_namespaces, (guintptr) list);
     }
   list = (GFileAttributeInfoList *)local_writable_namespaces;
 
