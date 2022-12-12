@@ -3184,7 +3184,7 @@ g_check_setuid (void)
   uid_t ruid, euid, suid; /* Real, effective and saved user ID's */
   gid_t rgid, egid, sgid; /* Real, effective and saved group ID's */
 
-  static gsize check_setuid_initialised;
+  static guintptr check_setuid_initialised = 0;
   static gboolean is_setuid;
 
   if (g_once_init_enter (&check_setuid_initialised))

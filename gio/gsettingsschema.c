@@ -339,7 +339,7 @@ try_prepend_data_dir (const gchar *directory)
 static void
 initialise_schema_sources (void)
 {
-  static gsize initialised;
+  static guintptr initialised;
 
   /* need a separate variable because 'schema_sources' may legitimately
    * be null if we have zero valid schema sources
@@ -853,7 +853,7 @@ g_settings_schema_source_list_schemas (GSettingsSchemaSource   *source,
 
 static gchar **non_relocatable_schema_list;
 static gchar **relocatable_schema_list;
-static gsize schema_lists_initialised;
+static guintptr schema_lists_initialised;
 
 static void
 ensure_schema_lists (void)

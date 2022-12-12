@@ -61,7 +61,7 @@ g_win32_notification_backend_send_notification (GNotificationBackend *backend,
                                                 const gchar          *id,
                                                 GNotification        *notification)
 {
-  static gsize warned = 0;
+  static guintptr warned = 0;
 
   /* FIXME: See https://bugzilla.gnome.org/show_bug.cgi?id=776583. This backend
    * exists purely to stop crashes when applications use g_notification*()

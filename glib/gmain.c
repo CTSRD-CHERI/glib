@@ -717,7 +717,7 @@ g_main_context_new (void)
 GMainContext *
 g_main_context_new_with_flags (GMainContextFlags flags)
 {
-  static gsize initialised;
+  static guintptr initialised;
   GMainContext *context;
 
   if (g_once_init_enter (&initialised))
@@ -6425,7 +6425,7 @@ glib_worker_main (gpointer data)
 GMainContext *
 g_get_worker_context (void)
 {
-  static gsize initialised;
+  static guintptr initialised = 0;
 
   if (g_once_init_enter (&initialised))
     {

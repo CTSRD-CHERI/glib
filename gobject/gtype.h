@@ -1888,7 +1888,7 @@ guint     g_type_get_type_registration_serial (void);
  * GType
  * gtk_gadget_get_type (void)
  * {
- *   static gsize static_g_define_type_id = 0;
+ *   static guintptr static_g_define_type_id = 0;
  *   if (g_once_init_enter (&static_g_define_type_id))
  *     {
  *       GType g_define_type_id =
@@ -2165,7 +2165,7 @@ type_name##_get_instance_private (TypeName *self) \
 GType \
 type_name##_get_type (void) \
 { \
-  static gsize static_g_define_type_id = 0;
+  static guintptr static_g_define_type_id = 0;
   /* Prelude goes here */
 
 /* Added for _G_DEFINE_TYPE_EXTENDED_WITH_PRELUDE */
@@ -2213,7 +2213,7 @@ static void     type_name##_default_init        (TypeName##Interface *klass); \
 GType \
 type_name##_get_type (void) \
 { \
-  static gsize static_g_define_type_id = 0; \
+  static guintptr static_g_define_type_id = 0; \
   if (g_once_init_enter (&static_g_define_type_id)) \
     { \
       GType g_define_type_id = \
@@ -2339,7 +2339,7 @@ static GType type_name##_get_type_once (void); \
 GType \
 type_name##_get_type (void) \
 { \
-  static gsize static_g_define_type_id = 0; \
+  static guintptr static_g_define_type_id = 0; \
   if (g_once_init_enter (&static_g_define_type_id)) \
     { \
       GType g_define_type_id = type_name##_get_type_once (); \
@@ -2376,7 +2376,7 @@ static GType type_name##_get_type_once (void); \
 GType \
 type_name##_get_type (void) \
 { \
-  static gsize static_g_define_type_id = 0; \
+  static guintptr static_g_define_type_id = 0; \
   if (g_once_init_enter (&static_g_define_type_id)) \
     { \
       GType g_define_type_id = type_name##_get_type_once (); \
@@ -2429,7 +2429,7 @@ static GType type_name##_get_type_once (void); \
 GType \
 type_name##_get_type (void) \
 { \
-  static gsize static_g_define_type_id = 0; \
+  static guintptr static_g_define_type_id = 0; \
   if (g_once_init_enter (&static_g_define_type_id)) \
     { \
       GType g_define_type_id = type_name##_get_type_once (); \

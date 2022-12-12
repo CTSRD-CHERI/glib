@@ -45,7 +45,7 @@ static GXdpOpenURI *openuri;
 static gboolean
 init_openuri_portal (void)
 {
-  static gsize openuri_inited = 0;
+  static guintptr openuri_inited = 0;
 
   if (g_once_init_enter (&openuri_inited))
     {

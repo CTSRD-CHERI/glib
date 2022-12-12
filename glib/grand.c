@@ -140,7 +140,7 @@ G_LOCK_DEFINE_STATIC (global_random);
 static guint
 get_random_version (void)
 {
-  static gsize initialized = FALSE;
+  static guintptr initialized = FALSE;
   static guint random_version;
 
   if (g_once_init_enter (&initialized))

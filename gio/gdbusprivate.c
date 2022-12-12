@@ -1945,7 +1945,7 @@ _g_dbus_debug_print_unlock (void)
 void
 _g_dbus_initialize (void)
 {
-  static gsize initialized = 0;
+  static guintptr initialized = 0;
 
   if (g_once_init_enter (&initialized))
     {
