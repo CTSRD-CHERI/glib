@@ -1348,7 +1348,7 @@ allocator_add_slab (Allocator *local_allocator,
   /* assert alignment */
   mem_assert (aligned_memory == addr);
   /* basic slab info setup */
-  sinfo = (SlabInfo*) (mem + page_size - SLAB_INFO_SIZE);
+  sinfo = (SlabInfo*) (mem + (page_size - SLAB_INFO_SIZE));
   sinfo->n_allocated = 0;
   sinfo->chunks = NULL;
   /* figure cache colorization */
@@ -1400,7 +1400,7 @@ slab_allocator_free_chunk (gsize    chunk_size,
   gsize page_size = allocator_aligned_page_size (allocator, SLAB_BPAGE_SIZE (allocator, chunk_size));
   /* mask page address */
   guint8 *page = (guint8*) ((guintptr) mem & ~(gsize) (page_size - 1));
-  SlabInfo *sinfo = (SlabInfo*) (page + page_size - SLAB_INFO_SIZE);
+  SlabInfo *sinfo = (SlabInfo*) (page + (page_size - SLAB_INFO_SIZE));
   /* assert valid chunk count */
   mem_assert (sinfo->n_allocated > 0);
   /* add chunk to free list */
