@@ -2760,7 +2760,7 @@ g_type_register_fundamental (GType                       type_id,
     {
       g_critical ("attempt to register fundamental type '%s' with invalid type id (%" G_GSIZE_FORMAT ")",
 		  type_name,
-		  type_id);
+		  (gsize) type_id);
       return 0;
     }
   if ((finfo->type_flags & G_TYPE_FLAG_INSTANTIATABLE) &&
@@ -4389,7 +4389,7 @@ g_type_value_table_peek (GType type)
     return vtable;
   
   if (!node)
-    g_critical (G_STRLOC ": type id '%" G_GSIZE_FORMAT "' is invalid", type);
+    g_critical (G_STRLOC ": type id '%" G_GSIZE_FORMAT "' is invalid", (gsize) type);
   if (!has_refed_data)
     g_critical ("can't peek value table for type '%s' which is not currently referenced",
 	        type_descriptive_name_I (type));
