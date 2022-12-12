@@ -1636,7 +1636,18 @@ else
   error('Could not determine size of size_t.')
 endif
 
-if voidp_size == int_size
+if cc.compiles('''
+#ifndef __CHERI_PURE_CAPABILITY__
+#error "Not purecap CHERI"
+#endif
+int main (void) { return 0; }''', name : 'targeting pure-capability CHERI')
+  glibconfig_conf.set('glib_intptr_type_define', '__intcap')
+  glibconfig_conf.set_quoted('gintptr_modifier', 'P')
+  glibconfig_conf.set_quoted('gintptr_format', 'Pi')
+  glibconfig_conf.set_quoted('guintptr_format', 'Pu')
+  glibconfig_conf.set('glib_gpi_cast', '(gintptr)')
+  glibconfig_conf.set('glib_gpui_cast', '(guintptr)')
+elif voidp_size == int_size
   glibconfig_conf.set('glib_intptr_type_define', 'int')
   glibconfig_conf.set_quoted('gintptr_modifier', '')
   glibconfig_conf.set_quoted('gintptr_format', 'i')
