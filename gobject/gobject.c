@@ -2053,7 +2053,7 @@ g_object_new (GType	   object_type,
 static inline gboolean
 g_object_is_aligned (GObject *object)
 {
-  return ((((guintptr) (void *) object) %
+  return ((((gsize) (guintptr) (void *) object) %
              MAX (G_ALIGNOF (gdouble),
                   MAX (G_ALIGNOF (guint64),
                        MAX (G_ALIGNOF (gint),

@@ -452,7 +452,7 @@ type_node_any_new_W (TypeNode             *pnode,
   else
     type = (GType) node;
   
-  g_assert ((type & TYPE_ID_MASK) == 0);
+  g_assert (((gsize) type & TYPE_ID_MASK) == 0);
   
   node->n_supers = n_supers;
   if (!pnode)
@@ -545,7 +545,7 @@ type_node_fundamental_new_W (GType                 ftype,
   GTypeFundamentalInfo *finfo;
   TypeNode *node;
   
-  g_assert ((ftype & TYPE_ID_MASK) == 0);
+  g_assert (((gsize) ftype & TYPE_ID_MASK) == 0);
   g_assert (ftype <= G_TYPE_FUNDAMENTAL_MAX);
   
   if (ftype >> G_TYPE_FUNDAMENTAL_SHIFT == static_fundamental_next)
@@ -903,7 +903,7 @@ check_type_info_I (TypeNode        *pnode,
   GTypeFundamentalInfo *finfo = type_node_fundamental_info_I (lookup_type_node_I (ftype));
   gboolean is_interface = ftype == G_TYPE_INTERFACE;
   
-  g_assert (ftype <= G_TYPE_FUNDAMENTAL_MAX && !(ftype & TYPE_ID_MASK));
+  g_assert (ftype <= G_TYPE_FUNDAMENTAL_MAX && !((gsize) ftype & TYPE_ID_MASK));
   
   /* check instance members */
   if (!(finfo->type_flags & G_TYPE_FLAG_INSTANTIATABLE) &&
