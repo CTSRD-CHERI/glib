@@ -665,7 +665,7 @@ type_lookup_prerequisite_L (TypeNode *iface,
 {
   if (NODE_IS_IFACE (iface) && IFACE_NODE_N_PREREQUISITES (iface))
     {
-      GType *prerequisites = IFACE_NODE_PREREQUISITES (iface) - 1;
+      GType *prerequisites = NULL;
       guint n_prerequisites = IFACE_NODE_N_PREREQUISITES (iface);
       
       do
@@ -674,7 +674,8 @@ type_lookup_prerequisite_L (TypeNode *iface,
 	  GType *check;
 	  
 	  i = (n_prerequisites + 1) >> 1;
-	  check = prerequisites + i;
+	  check = prerequisites ? prerequisites + i : IFACE_NODE_PREREQUISITES (iface) + (i - 1);
+	  prerequisites = check;
 	  if (prerequisite_type == *check)
 	    return TRUE;
 	  else if (prerequisite_type > *check)
@@ -3771,7 +3772,8 @@ type_get_qdata_L (TypeNode *node,
   
   if (quark && gdata && gdata->n_qdatas)
     {
-      QData *qdatas = gdata->qdatas - 1;
+      /* QData *qdatas = gdata->qdatas - 1; // XXX: this is UB (one-before start) */
+      QData *qdatas = NULL;
       guint n_qdatas = gdata->n_qdatas;
       
       do
@@ -3780,7 +3782,8 @@ type_get_qdata_L (TypeNode *node,
 	  QData *check;
 	  
 	  i = (n_qdatas + 1) / 2;
-	  check = qdatas + i;
+	  check = qdatas ? qdatas + i : gdata->qdatas + (i - 1);
+	  qdatas = check;
 	  if (quark == check->quark)
 	    return check->data;
 	  else if (quark > check->quark)
