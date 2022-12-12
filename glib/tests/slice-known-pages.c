@@ -64,7 +64,7 @@ allocate_from_known_page (void)
   for (i = 0; i < n_trials; i++)
     {
       void *b = g_slice_alloc (SAMPLE_SIZE);
-      void *p = (void*) (PAGE_SIZE * ((gsize) b / PAGE_SIZE));
+      void *p = (void *) ((guintptr) b & ~(gsize) (PAGE_SIZE - 1));
       free_list = g_slist_prepend (free_list, b);
       /* find page */
       for (j = 0; j < N_PAGES; j++)
@@ -89,7 +89,7 @@ test_slice_known_pages (void)
   while (n_pages < N_PAGES)
     {
       void *b = g_slice_alloc (SAMPLE_SIZE);
-      void *p = (void*) (PAGE_SIZE * ((gsize) b / PAGE_SIZE));
+      void *p = (void *) ((guintptr) b & ~(gsize) (PAGE_SIZE - 1));
       for (j = 0; j < N_PAGES; j++)
         if (pages[j].page == p)
           break;
