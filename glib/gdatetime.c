@@ -2914,7 +2914,7 @@ format_number (GString     *str,
   if (use_alt_digits)
     {
       static const gchar * const *alt_digits = NULL;
-      static gsize initialised;
+      static guintptr initialised;
 
       if G_UNLIKELY (g_once_init_enter (&initialised))
         {

@@ -503,7 +503,7 @@ gboolean
 _g_win32_call_rtl_version (OSVERSIONINFOEXW *info)
 {
   static OSVERSIONINFOEXW result;
-  static gsize inited = 0;
+  static guintptr inited = 0;
 
   g_return_val_if_fail (info != NULL, FALSE);
 
@@ -646,7 +646,7 @@ g_win32_check_windows_version (const gint major,
 guint
 g_win32_get_windows_version (void)
 {
-  static gsize windows_version;
+  static guintptr windows_version = 0;
 
   if (g_once_init_enter (&windows_version))
     g_once_init_leave (&windows_version, GetVersion ());

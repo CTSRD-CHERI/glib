@@ -3971,7 +3971,7 @@ gio_win32_appinfo_thread_func (gpointer data,
 void
 gio_win32_appinfo_init (gboolean do_wait)
 {
-  static gsize initialized;
+  static guintptr initialized = 0;
 
   if (g_once_init_enter (&initialized))
     {

@@ -542,7 +542,7 @@ gpointer
  *
  * Since: 2.30
  **/
-gssize
+gintptr
 (g_atomic_pointer_add) (volatile void *atomic,
                         gssize         val)
 {
@@ -569,7 +569,7 @@ gssize
  *
  * Since: 2.30
  **/
-gsize
+guintptr
 (g_atomic_pointer_and) (volatile void *atomic,
                         gsize          val)
 {
@@ -596,7 +596,7 @@ gsize
  *
  * Since: 2.30
  **/
-gsize
+guintptr
 (g_atomic_pointer_or) (volatile void *atomic,
                        gsize          val)
 {
@@ -623,7 +623,7 @@ gsize
  *
  * Since: 2.30
  **/
-gsize
+guintptr
 (g_atomic_pointer_xor) (volatile void *atomic,
                         gsize          val)
 {
@@ -1112,7 +1112,7 @@ gpointer
   return oldval;
 }
 
-gssize
+gintptr
 (g_atomic_pointer_add) (volatile void *atomic,
                         gssize         val)
 {
@@ -1127,12 +1127,12 @@ gssize
   return oldval;
 }
 
-gsize
+guintptr
 (g_atomic_pointer_and) (volatile void *atomic,
                         gsize          val)
 {
-  gsize *ptr = atomic;
-  gsize oldval;
+  guintptr *ptr = atomic;
+  guintptr oldval;
 
   pthread_mutex_lock (&g_atomic_lock);
   oldval = *ptr;
@@ -1142,12 +1142,12 @@ gsize
   return oldval;
 }
 
-gsize
+guintptr
 (g_atomic_pointer_or) (volatile void *atomic,
                        gsize          val)
 {
-  gsize *ptr = atomic;
-  gsize oldval;
+  guintptr *ptr = atomic;
+  guintptr oldval;
 
   pthread_mutex_lock (&g_atomic_lock);
   oldval = *ptr;
@@ -1157,12 +1157,12 @@ gsize
   return oldval;
 }
 
-gsize
+guintptr
 (g_atomic_pointer_xor) (volatile void *atomic,
                         gsize          val)
 {
-  gsize *ptr = atomic;
-  gsize oldval;
+  guintptr *ptr = atomic;
+  guintptr oldval;
 
   pthread_mutex_lock (&g_atomic_lock);
   oldval = *ptr;

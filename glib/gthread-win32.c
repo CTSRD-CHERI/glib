@@ -641,7 +641,7 @@ g_thread_win32_load_library (void)
 {
   /* FIXME: Add support for UWP app */
 #if !defined(G_WINAPI_ONLY_APP)
-  static gsize _init_once = 0;
+  static guintptr _init_once = 0;
   if (g_once_init_enter (&_init_once))
     {
       kernel32_module = LoadLibraryW (L"kernel32.dll");

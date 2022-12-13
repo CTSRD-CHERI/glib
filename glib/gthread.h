@@ -234,7 +234,7 @@ GLIB_AVAILABLE_IN_ALL
 gboolean        g_once_init_enter               (volatile void  *location);
 GLIB_AVAILABLE_IN_ALL
 void            g_once_init_leave               (volatile void  *location,
-                                                 gsize           result);
+                                                 guintptr        result);
 
 /* Use C11-style atomic extensions to check the fast path for status=ready. If
  * they are not available, fall back to using a mutex and condition variable in
@@ -266,7 +266,7 @@ void            g_once_init_leave               (volatile void  *location,
   (G_GNUC_EXTENSION ({                                               \
     G_STATIC_ASSERT (sizeof *(location) == sizeof (gpointer));       \
     0 ? (void) (*(location) = (result)) : (void) 0;                  \
-    g_once_init_leave ((location), (gsize) (result));                \
+    g_once_init_leave ((location), (guintptr) (result));             \
   }))
 #else
 # define g_once_init_enter(location) \

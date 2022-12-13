@@ -80,7 +80,7 @@ gchar       *accounts_user_frobnicate_sync     (AccountsUser        *user,
 static GDBusInterfaceInfo *
 accounts_user_get_interface_info (void)
 {
-  static gsize has_info = 0;
+  static guintptr has_info = 0;
   static GDBusInterfaceInfo *info = NULL;
   if (g_once_init_enter (&has_info))
     {

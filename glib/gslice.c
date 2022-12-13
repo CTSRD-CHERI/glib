@@ -189,7 +189,7 @@
 
 /* --- macros and constants --- */
 #define LARGEALIGNMENT          (256)
-#define P2ALIGNMENT             (2 * sizeof (gsize))                            /* fits 2 pointers (assumed to be 2 * GLIB_SIZEOF_SIZE_T below) */
+#define P2ALIGNMENT             (2 * sizeof (gintptr))                          /* fits 2 pointers (assumed to be 2 * GLIB_SIZEOF_SIZE_T below) */
 #define ALIGN(size, base)       ((base) * (gsize) (((size) + (base) - 1) / (base)))
 #define NATIVE_MALLOC_PADDING   P2ALIGNMENT                                     /* per-page padding left for native malloc(3) see [1] */
 #define SLAB_INFO_SIZE          P2ALIGN (sizeof (SlabInfo) + NATIVE_MALLOC_PADDING)
@@ -203,10 +203,12 @@
 #define SLAB_BPAGE_SIZE(al,csz) (8 * (csz) + SLAB_INFO_SIZE)
 
 /* optimized version of ALIGN (size, P2ALIGNMENT) */
-#if     GLIB_SIZEOF_SIZE_T * 2 == 8  /* P2ALIGNMENT */
+#if     GLIB_SIZEOF_VOID_P * 2 == 8  /* P2ALIGNMENT */
 #define P2ALIGN(size)   (((size) + 0x7) & ~(gsize) 0x7)
-#elif   GLIB_SIZEOF_SIZE_T * 2 == 16 /* P2ALIGNMENT */
+#elif   GLIB_SIZEOF_VOID_P * 2 == 16 /* P2ALIGNMENT */
 #define P2ALIGN(size)   (((size) + 0xf) & ~(gsize) 0xf)
+#elif   GLIB_SIZEOF_VOID_P * 2 == 32 /* P2ALIGNMENT */
+#define P2ALIGN(size)   (((size) + 0x1f) & ~(gsize) 0x1f)
 #else
 #define P2ALIGN(size)   ALIGN (size, P2ALIGNMENT)
 #endif
@@ -747,7 +749,7 @@ magazine_cache_push_magazine (guint      ix,
   magazine_chain_prev (next) = current;
   magazine_chain_prev (current) = prev;
   magazine_chain_next (current) = next;
-  magazine_chain_count (current) = (gpointer) count;
+  magazine_chain_count (current) = GSIZE_TO_POINTER (count);
   /* stamp magazine */
   magazine_cache_update_stamp();
   magazine_chain_stamp (current) = GUINT_TO_POINTER (allocator->last_stamp);
@@ -1321,9 +1323,10 @@ allocator_add_slab (Allocator *local_allocator,
 {
   ChunkLink *chunk;
   SlabInfo *sinfo;
-  gsize addr, padding, n_chunks, color = 0;
+  gsize padding, n_chunks, color = 0;
   gsize page_size;
   int errsv;
+  gpointer addr;
   gpointer aligned_memory;
   guint8 *mem;
   guint i;
@@ -1341,11 +1344,11 @@ allocator_add_slab (Allocator *local_allocator,
                  (guint) (page_size - NATIVE_MALLOC_PADDING), (guint) page_size, syserr);
     }
   /* mask page address */
-  addr = ((gsize) mem / page_size) * page_size;
+  addr = (gpointer) ((guintptr) mem & ~(gsize)(page_size - 1));
   /* assert alignment */
-  mem_assert (aligned_memory == (gpointer) addr);
+  mem_assert (aligned_memory == addr);
   /* basic slab info setup */
-  sinfo = (SlabInfo*) (mem + page_size - SLAB_INFO_SIZE);
+  sinfo = (SlabInfo*) (mem + (page_size - SLAB_INFO_SIZE));
   sinfo->n_allocated = 0;
   sinfo->chunks = NULL;
   /* figure cache colorization */
@@ -1395,10 +1398,9 @@ slab_allocator_free_chunk (gsize    chunk_size,
   gboolean was_empty;
   guint ix = SLAB_INDEX (allocator, chunk_size);
   gsize page_size = allocator_aligned_page_size (allocator, SLAB_BPAGE_SIZE (allocator, chunk_size));
-  gsize addr = ((gsize) mem / page_size) * page_size;
   /* mask page address */
-  guint8 *page = (guint8*) addr;
-  SlabInfo *sinfo = (SlabInfo*) (page + page_size - SLAB_INFO_SIZE);
+  guint8 *page = (guint8*) ((guintptr) mem & ~(gsize) (page_size - 1));
+  SlabInfo *sinfo = (SlabInfo*) (page + (page_size - SLAB_INFO_SIZE));
   /* assert valid chunk count */
   mem_assert (sinfo->n_allocated > 0);
   /* add chunk to free list */

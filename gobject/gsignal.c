@@ -1327,7 +1327,7 @@ g_signal_lookup (const gchar *name,
       /* give elaborate warnings */
       if (!g_type_name (itype))
 	g_critical (G_STRLOC ": unable to look up signal \"%s\" for invalid type id '%"G_GSIZE_FORMAT"'",
-		    name, itype);
+		    name, (gsize) itype);
       else if (!g_signal_is_valid_name (name))
         g_critical (G_STRLOC ": unable to look up invalid signal name \"%s\" on type '%s'",
                     name, g_type_name (itype));
@@ -1376,7 +1376,7 @@ g_signal_list_ids (GType  itype,
       /* give elaborate warnings */
       if (!g_type_name (itype))
 	g_critical (G_STRLOC ": unable to list signals for invalid type id '%"G_GSIZE_FORMAT"'",
-		    itype);
+		    (gsize) itype);
       else if (!G_TYPE_IS_INSTANTIATABLE (itype) && !G_TYPE_IS_INTERFACE (itype))
 	g_critical (G_STRLOC ": unable to list signals of non instantiatable type '%s'",
 		    g_type_name (itype));
@@ -2128,7 +2128,7 @@ g_signal_override_class_handler (const gchar *signal_name,
                                      g_cclosure_new (class_handler, NULL, NULL));
   else
     g_critical ("%s: signal name '%s' is invalid for type id '%"G_GSIZE_FORMAT"'",
-                G_STRLOC, signal_name, instance_type);
+                G_STRLOC, signal_name, (gsize) instance_type);
 
 }
 

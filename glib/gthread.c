@@ -677,7 +677,7 @@ g_once_impl (GOnce       *once,
  * like this:
  *
  * |[<!-- language="C" --> 
- *   static gsize initialization_value = 0;
+ *   static guintptr initialization_value = 0;
  *
  *   if (g_once_init_enter (&initialization_value))
  *     {
@@ -700,7 +700,7 @@ g_once_impl (GOnce       *once,
 gboolean
 (g_once_init_enter) (volatile void *location)
 {
-  gsize *value_location = (gsize *) location;
+  gpointer *value_location = (gpointer *) location;
   gboolean need_init = FALSE;
   g_mutex_lock (&g_once_mutex);
   if (g_atomic_pointer_get (value_location) == 0)
@@ -738,14 +738,14 @@ gboolean
  */
 void
 (g_once_init_leave) (volatile void *location,
-                     gsize          result)
+                     guintptr       result)
 {
-  gsize *value_location = (gsize *) location;
-  gsize old_value;
+  gpointer *value_location = (gpointer *) location;
+  gpointer old_value;
 
   g_return_if_fail (result != 0);
 
-  old_value = (gsize) g_atomic_pointer_exchange (value_location, result);
+  old_value = g_atomic_pointer_exchange (value_location, (gpointer) result);
   g_return_if_fail (old_value == 0);
 
   g_mutex_lock (&g_once_mutex);

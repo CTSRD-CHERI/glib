@@ -452,7 +452,7 @@ type_node_any_new_W (TypeNode             *pnode,
   else
     type = (GType) node;
   
-  g_assert ((type & TYPE_ID_MASK) == 0);
+  g_assert (((gsize) type & TYPE_ID_MASK) == 0);
   
   node->n_supers = n_supers;
   if (!pnode)
@@ -545,7 +545,7 @@ type_node_fundamental_new_W (GType                 ftype,
   GTypeFundamentalInfo *finfo;
   TypeNode *node;
   
-  g_assert ((ftype & TYPE_ID_MASK) == 0);
+  g_assert (((gsize) ftype & TYPE_ID_MASK) == 0);
   g_assert (ftype <= G_TYPE_FUNDAMENTAL_MAX);
   
   if (ftype >> G_TYPE_FUNDAMENTAL_SHIFT == static_fundamental_next)
@@ -665,7 +665,7 @@ type_lookup_prerequisite_L (TypeNode *iface,
 {
   if (NODE_IS_IFACE (iface) && IFACE_NODE_N_PREREQUISITES (iface))
     {
-      GType *prerequisites = IFACE_NODE_PREREQUISITES (iface) - 1;
+      GType *prerequisites = NULL;
       guint n_prerequisites = IFACE_NODE_N_PREREQUISITES (iface);
       
       do
@@ -674,7 +674,8 @@ type_lookup_prerequisite_L (TypeNode *iface,
 	  GType *check;
 	  
 	  i = (n_prerequisites + 1) >> 1;
-	  check = prerequisites + i;
+	  check = prerequisites ? prerequisites + i : IFACE_NODE_PREREQUISITES (iface) + (i - 1);
+	  prerequisites = check;
 	  if (prerequisite_type == *check)
 	    return TRUE;
 	  else if (prerequisite_type > *check)
@@ -902,7 +903,7 @@ check_type_info_I (TypeNode        *pnode,
   GTypeFundamentalInfo *finfo = type_node_fundamental_info_I (lookup_type_node_I (ftype));
   gboolean is_interface = ftype == G_TYPE_INTERFACE;
   
-  g_assert (ftype <= G_TYPE_FUNDAMENTAL_MAX && !(ftype & TYPE_ID_MASK));
+  g_assert (ftype <= G_TYPE_FUNDAMENTAL_MAX && !((gsize) ftype & TYPE_ID_MASK));
   
   /* check instance members */
   if (!(finfo->type_flags & G_TYPE_FLAG_INSTANTIATABLE) &&
@@ -2760,7 +2761,7 @@ g_type_register_fundamental (GType                       type_id,
     {
       g_critical ("attempt to register fundamental type '%s' with invalid type id (%" G_GSIZE_FORMAT ")",
 		  type_name,
-		  type_id);
+		  (gsize) type_id);
       return 0;
     }
   if ((finfo->type_flags & G_TYPE_FLAG_INSTANTIATABLE) &&
@@ -3771,7 +3772,8 @@ type_get_qdata_L (TypeNode *node,
   
   if (quark && gdata && gdata->n_qdatas)
     {
-      QData *qdatas = gdata->qdatas - 1;
+      /* QData *qdatas = gdata->qdatas - 1; // XXX: this is UB (one-before start) */
+      QData *qdatas = NULL;
       guint n_qdatas = gdata->n_qdatas;
       
       do
@@ -3780,7 +3782,8 @@ type_get_qdata_L (TypeNode *node,
 	  QData *check;
 	  
 	  i = (n_qdatas + 1) / 2;
-	  check = qdatas + i;
+	  check = qdatas ? qdatas + i : gdata->qdatas + (i - 1);
+	  qdatas = check;
 	  if (quark == check->quark)
 	    return check->data;
 	  else if (quark > check->quark)
@@ -4389,7 +4392,7 @@ g_type_value_table_peek (GType type)
     return vtable;
   
   if (!node)
-    g_critical (G_STRLOC ": type id '%" G_GSIZE_FORMAT "' is invalid", type);
+    g_critical (G_STRLOC ": type id '%" G_GSIZE_FORMAT "' is invalid", (gsize) type);
   if (!has_refed_data)
     g_critical ("can't peek value table for type '%s' which is not currently referenced",
 	        type_descriptive_name_I (type));

@@ -2053,7 +2053,7 @@ g_object_new (GType	   object_type,
 static inline gboolean
 g_object_is_aligned (GObject *object)
 {
-  return ((((guintptr) (void *) object) %
+  return ((((gsize) (guintptr) (void *) object) %
              MAX (G_ALIGNOF (gdouble),
                   MAX (G_ALIGNOF (guint64),
                        MAX (G_ALIGNOF (gint),
@@ -3417,14 +3417,14 @@ object_floating_flag_handler (GObject        *object,
     case +1:    /* force floating if possible */
       do
         oldvalue = g_atomic_pointer_get (&object->qdata);
-      while (!g_atomic_pointer_compare_and_exchange ((void**) &object->qdata, oldvalue,
-                                                     (gpointer) ((gsize) oldvalue | OBJECT_FLOATING_FLAG)));
+      while (!g_atomic_pointer_compare_and_exchange ((void **) &object->qdata, oldvalue,
+                                                     (gpointer) ((guintptr) oldvalue | OBJECT_FLOATING_FLAG)));
       return (gsize) oldvalue & OBJECT_FLOATING_FLAG;
     case -1:    /* sink if possible */
       do
         oldvalue = g_atomic_pointer_get (&object->qdata);
-      while (!g_atomic_pointer_compare_and_exchange ((void**) &object->qdata, oldvalue,
-                                                     (gpointer) ((gsize) oldvalue & ~(gsize) OBJECT_FLOATING_FLAG)));
+      while (!g_atomic_pointer_compare_and_exchange ((void **) &object->qdata, oldvalue,
+                                                     (gpointer) ((guintptr) oldvalue & ~(gsize) OBJECT_FLOATING_FLAG)));
       return (gsize) oldvalue & OBJECT_FLOATING_FLAG;
     default:    /* check floating */
       return 0 != ((gsize) g_atomic_pointer_get (&object->qdata) & OBJECT_FLOATING_FLAG);

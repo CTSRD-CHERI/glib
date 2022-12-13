@@ -4918,7 +4918,7 @@ class CodeGenerator:
             "{\n" % (self.ns_lower)
         )
         self.outfile.write(
-            "  static gsize once_init_value = 0;\n"
+            "  static guintptr once_init_value = 0;\n"
             "  static GHashTable *lookup_hash;\n"
             "  GType ret;\n"
             "\n"

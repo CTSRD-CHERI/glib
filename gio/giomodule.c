@@ -1187,7 +1187,7 @@ _g_io_win32_get_module (void)
 void
 _g_io_modules_ensure_extension_points_registered (void)
 {
-  static gsize registered_extensions = FALSE;
+  static guintptr registered_extensions = FALSE;
   GIOExtensionPoint *ep;
 
   if (g_once_init_enter (&registered_extensions))
@@ -1303,7 +1303,7 @@ get_gio_module_dir (void)
 void
 _g_io_modules_ensure_loaded (void)
 {
-  static gsize loaded_dirs = FALSE;
+  static guintptr loaded_dirs = FALSE;
   const char *module_path;
   GIOModuleScope *scope;
 

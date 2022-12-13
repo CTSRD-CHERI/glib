@@ -98,7 +98,7 @@
 static void g_local_file_file_iface_init (GFileIface *iface);
 
 static GFileAttributeInfoList *local_writable_attributes = NULL;
-static /* GFileAttributeInfoList * */ gsize local_writable_namespaces = 0;
+static /* GFileAttributeInfoList * */ guintptr local_writable_namespaces = 0;
 
 struct _GLocalFile
 {
@@ -1290,7 +1290,7 @@ g_local_file_query_writable_namespaces (GFile         *file,
       if (class->add_writable_namespaces)
 	class->add_writable_namespaces (vfs, list);
 
-      g_once_init_leave (&local_writable_namespaces, (gsize)list);
+      g_once_init_leave (&local_writable_namespaces, (guintptr) list);
     }
   list = (GFileAttributeInfoList *)local_writable_namespaces;
 
@@ -1842,7 +1842,7 @@ ignore_trash_path (const gchar *topdir)
 gboolean
 _g_local_file_has_trash_dir (const char *dirname, dev_t dir_dev)
 {
-  static gsize home_dev_set = 0;
+  static guintptr home_dev_set = 0;
   static dev_t home_dev;
   static gboolean home_dev_valid = FALSE;
   char *topdir, *globaldir, *trashdir, *tmpname;
@@ -2618,7 +2618,7 @@ gboolean
 g_local_file_is_nfs_home (const gchar *filename)
 {
   static gboolean remote_home = FALSE;
-  static gsize initialized;
+  static guintptr initialized;
   const gchar *home;
 
   home = g_get_home_dir ();
