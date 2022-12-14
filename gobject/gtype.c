@@ -458,7 +458,7 @@ type_node_any_new_W (TypeNode             *pnode,
 #endif
     }
   else
-    type = (GType) node;
+    type = GPOINTER_TO_TYPE (node);
   
   g_assert ((type & TYPE_ID_MASK) == 0);
   
@@ -527,7 +527,7 @@ type_node_any_new_W (TypeNode             *pnode,
   node->global_gdata = NULL;
   g_hash_table_insert (static_type_nodes_ht,
 		       (gpointer) g_quark_to_string (node->qname),
-		       (gpointer) type);
+		       GTYPE_TO_POINTER (type));
 
   g_atomic_int_inc ((gint *)&type_registration_serial);
 
@@ -3476,7 +3476,7 @@ g_type_from_name (const gchar *name)
   g_return_val_if_fail (name != NULL, 0);
   
   G_READ_LOCK (&type_rw_lock);
-  type = (GType) g_hash_table_lookup (static_type_nodes_ht, name);
+  type = GPOINTER_TO_TYPE (g_hash_table_lookup (static_type_nodes_ht, name));
   G_READ_UNLOCK (&type_rw_lock);
   
   return type;
