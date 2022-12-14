@@ -479,6 +479,7 @@ handler_list_ensure (guint    signal_id,
 		     gpointer instance)
 {
   GBSearchArray *hlbsa = g_hash_table_lookup (g_handler_list_bsa_ht, instance);
+  guint old_nodes = 0;
   HandlerList key;
   
   key.signal_id = signal_id;
@@ -486,19 +487,13 @@ handler_list_ensure (guint    signal_id,
   key.tail_before = NULL;
   key.tail_after  = NULL;
   if (!hlbsa)
-    {
-      hlbsa = g_bsearch_array_create (&g_signal_hlbsa_bconfig);
-      hlbsa = g_bsearch_array_insert (hlbsa, &g_signal_hlbsa_bconfig, &key);
-      g_hash_table_insert (g_handler_list_bsa_ht, instance, hlbsa);
-    }
+    hlbsa = g_bsearch_array_create (&g_signal_hlbsa_bconfig);
   else
-    {
-      GBSearchArray *o = hlbsa;
+    old_nodes = g_bsearch_array_get_n_nodes (hlbsa);
 
-      hlbsa = g_bsearch_array_insert (o, &g_signal_hlbsa_bconfig, &key);
-      if (hlbsa != o)
-	g_hash_table_insert (g_handler_list_bsa_ht, instance, hlbsa);
-    }
+  hlbsa = g_bsearch_array_insert (hlbsa, &g_signal_hlbsa_bconfig, &key);
+  if (old_nodes != g_bsearch_array_get_n_nodes (hlbsa))
+    g_hash_table_insert (g_handler_list_bsa_ht, instance, hlbsa);
   return g_bsearch_array_lookup (hlbsa, &g_signal_hlbsa_bconfig, &key);
 }
 
