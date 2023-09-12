@@ -704,7 +704,17 @@ gboolean
   gsize *value_location = (gsize *) location;
   gboolean need_init = FALSE;
   g_mutex_lock (&g_once_mutex);
+#if defined(G_ATOMIC_LOCK_FREE) && defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4)
+  /* We are actually loading a gsize which is not guaranteed to be the same as
+   * a pointer (e.g. on CHERI-enabled systems). For such systems, we have to
+   * explicitly use a size_t atomic operation since using a pointer-type on
+   * would trigger a bounds errors. We could add g_atomic_size_exchange, but
+   * as this is currently only needed for platforms with a modern LLVM
+   * compiler we can use the builtin directly. */
+  if (__atomic_load_n (value_location, __ATOMIC_SEQ_CST) == 0)
+#else
   if (g_atomic_pointer_get (value_location) == 0)
+#endif
     {
       if (!g_slist_find (g_once_init_list, (void*) value_location))
         {
@@ -794,7 +804,12 @@ void
 
   g_return_if_fail (result != 0);
 
+#if defined(G_ATOMIC_LOCK_FREE) && defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4)
+  /* See comment in g_once_init_enter for why we need this ifdef. */
+  old_value = __atomic_exchange_n (value_location, result, __ATOMIC_SEQ_CST);
+#else
   old_value = (gsize) g_atomic_pointer_exchange (value_location, result);
+#endif
   g_return_if_fail (old_value == 0);
 
   g_mutex_lock (&g_once_mutex);
