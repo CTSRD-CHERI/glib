@@ -575,7 +575,7 @@ normalise_whitespace (const gchar *orig)
   gchar *result;
   gint i;
 
-  if (g_once_init_enter (&splitter))
+  if (g_once_init_enter_pointer (&splitter))
     {
       GRegex *s;
 
@@ -588,7 +588,7 @@ normalise_whitespace (const gchar *orig)
       s = g_regex_new ("\\n\\s*\\n+", G_REGEX_DEFAULT,
                        G_REGEX_MATCH_DEFAULT, NULL);
 
-      g_once_init_leave (&splitter, s);
+      g_once_init_leave_pointer (&splitter, s);
     }
 
   lines = g_regex_split (splitter, orig, 0);
@@ -739,7 +739,7 @@ parse_into_text_tables (const gchar *directory,
 static GHashTable **
 g_settings_schema_source_get_text_tables (GSettingsSchemaSource *source)
 {
-  if (g_once_init_enter (&source->text_tables))
+  if (g_once_init_enter_pointer (&source->text_tables))
     {
       GHashTable **text_tables;
 
@@ -750,7 +750,7 @@ g_settings_schema_source_get_text_tables (GSettingsSchemaSource *source)
       if (source->directory)
         parse_into_text_tables (source->directory, text_tables[0], text_tables[1]);
 
-      g_once_init_leave (&source->text_tables, text_tables);
+      g_once_init_leave_pointer (&source->text_tables, text_tables);
     }
 
   return source->text_tables;
@@ -1470,7 +1470,7 @@ g_settings_schema_key_get_per_desktop_default (GSettingsSchemaKey *key)
   if (!key->desktop_overrides)
     return NULL;
 
-  if (g_once_init_enter (&current_desktops))
+  if (g_once_init_enter_pointer (&current_desktops))
     {
       const gchar *xdg_current_desktop = g_getenv ("XDG_CURRENT_DESKTOP");
       gchar **tmp;
@@ -1480,7 +1480,7 @@ g_settings_schema_key_get_per_desktop_default (GSettingsSchemaKey *key)
       else
         tmp = g_new0 (gchar *, 0 + 1);
 
-      g_once_init_leave (&current_desktops, (const gchar **) tmp);
+      g_once_init_leave_pointer (&current_desktops, (const gchar **) tmp);
     }
 
   for (i = 0; value == NULL && current_desktops[i] != NULL; i++)
