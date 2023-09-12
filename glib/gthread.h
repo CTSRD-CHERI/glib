@@ -263,14 +263,14 @@ void g_once_init_leave_pointer                  (void *location,
 #ifdef __GNUC__
 # define g_once_init_enter(location) \
   (G_GNUC_EXTENSION ({                                               \
-    G_STATIC_ASSERT (sizeof *(location) == sizeof (gpointer));       \
-    (void) (0 ? (gpointer) *(location) : NULL);                      \
-    (!g_atomic_pointer_get (location) &&                             \
+    G_STATIC_ASSERT (sizeof *(location) == sizeof (gsize));          \
+    (void) (0 ? (gsize) *(location) : 0);                            \
+    (__atomic_load_n (location, __ATOMIC_SEQ_CST) == 0 &&            \
      g_once_init_enter (location));                                  \
   }))
 # define g_once_init_leave(location, result) \
   (G_GNUC_EXTENSION ({                                               \
-    G_STATIC_ASSERT (sizeof *(location) == sizeof (gpointer));       \
+    G_STATIC_ASSERT (sizeof *(location) == sizeof (gsize));          \
     0 ? (void) (*(location) = (result)) : (void) 0;                  \
     g_once_init_leave ((location), (gsize) (result));                \
   }))
