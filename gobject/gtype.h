@@ -1897,8 +1897,8 @@ guint     g_type_get_type_registration_serial (void);
  * GType
  * gtk_gadget_get_type (void)
  * {
- *   static gsize static_g_define_type_id = 0;
- *   if (g_once_init_enter (&static_g_define_type_id))
+ *   static GType static_g_define_type_id = 0;
+ *   if (g_once_init_enter_pointer (&static_g_define_type_id))
  *     {
  *       GType g_define_type_id =
  *         g_type_register_static_simple (GTK_TYPE_WIDGET,
@@ -1918,7 +1918,7 @@ guint     g_type_get_type_registration_serial (void);
  *         };
  *         g_type_add_interface_static (g_define_type_id, TYPE_GIZMO, &g_implement_interface_info);
  *       }
- *       g_once_init_leave (&static_g_define_type_id, g_define_type_id);
+ *       g_once_init_leave_pointer (&static_g_define_type_id, g_define_type_id);
  *     }
  *   return static_g_define_type_id;
  * }
@@ -2153,6 +2153,16 @@ static void     type_name##_class_intern_init (gpointer klass) \
 }
 #endif /* GLIB_VERSION_MAX_ALLOWED >= GLIB_VERSION_2_38 */
 
+#if GLIB_VERSION_MAX_ALLOWED >= GLIB_VERSION_2_80
+#define _g_type_once_init_type GType
+#define _g_type_once_init_enter g_once_init_enter_pointer
+#define _g_type_once_init_leave g_once_init_leave_pointer
+#else  /* if GLIB_VERSION_MAX_ALLOWED < GLIB_VERSION_2_80 */
+#define _g_type_once_init_type gsize
+#define _g_type_once_init_enter g_once_init_enter
+#define _g_type_once_init_leave g_once_init_leave
+#endif  /* GLIB_VERSION_MAX_ALLOWED >= GLIB_VERSION_2_80 */
+
 /* Added for _G_DEFINE_TYPE_EXTENDED_WITH_PRELUDE */
 #define _G_DEFINE_TYPE_EXTENDED_BEGIN_PRE(TypeName, type_name, TYPE_PARENT) \
 \
@@ -2174,15 +2184,15 @@ type_name##_get_instance_private (TypeName *self) \
 GType \
 type_name##_get_type (void) \
 { \
-  static gsize static_g_define_type_id = 0;
+  static _g_type_once_init_type static_g_define_type_id = 0;
   /* Prelude goes here */
 
 /* Added for _G_DEFINE_TYPE_EXTENDED_WITH_PRELUDE */
 #define _G_DEFINE_TYPE_EXTENDED_BEGIN_REGISTER(TypeName, type_name, TYPE_PARENT, flags) \
-  if (g_once_init_enter (&static_g_define_type_id)) \
+  if (_g_type_once_init_enter (&static_g_define_type_id)) \
     { \
       GType g_define_type_id = type_name##_get_type_once (); \
-      g_once_init_leave (&static_g_define_type_id, g_define_type_id); \
+      _g_type_once_init_leave (&static_g_define_type_id, g_define_type_id); \
     }					\
   return static_g_define_type_id; \
 } /* closes type_name##_get_type() */ \
@@ -2222,8 +2232,8 @@ static void     type_name##_default_init        (TypeName##Interface *klass); \
 GType \
 type_name##_get_type (void) \
 { \
-  static gsize static_g_define_type_id = 0; \
-  if (g_once_init_enter (&static_g_define_type_id)) \
+  static _g_type_once_init_type static_g_define_type_id = 0; \
+  if (_g_type_once_init_enter (&static_g_define_type_id)) \
     { \
       GType g_define_type_id = \
         g_type_register_static_simple (G_TYPE_INTERFACE, \
@@ -2239,7 +2249,7 @@ type_name##_get_type (void) \
 #define _G_DEFINE_INTERFACE_EXTENDED_END()	\
         /* following custom code */		\
       }						\
-      g_once_init_leave (&static_g_define_type_id, g_define_type_id); \
+      _g_type_once_init_leave (&static_g_define_type_id, g_define_type_id); \
     }						\
   return static_g_define_type_id; \
 } /* closes type_name##_get_type() */
@@ -2348,11 +2358,11 @@ static GType type_name##_get_type_once (void); \
 GType \
 type_name##_get_type (void) \
 { \
-  static gsize static_g_define_type_id = 0; \
-  if (g_once_init_enter (&static_g_define_type_id)) \
+  static _g_type_once_init_type static_g_define_type_id = 0; \
+  if (_g_type_once_init_enter (&static_g_define_type_id)) \
     { \
       GType g_define_type_id = type_name##_get_type_once (); \
-      g_once_init_leave (&static_g_define_type_id, g_define_type_id); \
+      _g_type_once_init_leave (&static_g_define_type_id, g_define_type_id); \
     } \
   return static_g_define_type_id; \
 } \
@@ -2385,11 +2395,11 @@ static GType type_name##_get_type_once (void); \
 GType \
 type_name##_get_type (void) \
 { \
-  static gsize static_g_define_type_id = 0; \
-  if (g_once_init_enter (&static_g_define_type_id)) \
+  static _g_type_once_init_type static_g_define_type_id = 0; \
+  if (_g_type_once_init_enter (&static_g_define_type_id)) \
     { \
       GType g_define_type_id = type_name##_get_type_once (); \
-      g_once_init_leave (&static_g_define_type_id, g_define_type_id); \
+      _g_type_once_init_leave (&static_g_define_type_id, g_define_type_id); \
     } \
   return static_g_define_type_id; \
 } \
@@ -2438,11 +2448,11 @@ static GType type_name##_get_type_once (void); \
 GType \
 type_name##_get_type (void) \
 { \
-  static gsize static_g_define_type_id = 0; \
-  if (g_once_init_enter (&static_g_define_type_id)) \
+  static _g_type_once_init_type static_g_define_type_id = 0; \
+  if (_g_type_once_init_enter (&static_g_define_type_id)) \
     { \
       GType g_define_type_id = type_name##_get_type_once (); \
-      g_once_init_leave (&static_g_define_type_id, g_define_type_id); \
+      _g_type_once_init_leave (&static_g_define_type_id, g_define_type_id); \
     } \
   return static_g_define_type_id; \
 } \
