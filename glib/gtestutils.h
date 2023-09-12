@@ -50,13 +50,13 @@ typedef void (*GTestFixtureFunc) (gpointer      fixture,
                                                  #s1 " " #cmp " " #s2, __s1, #cmp, __s2); \
                                         } G_STMT_END
 #define g_assert_cmpint(n1, cmp, n2)    G_STMT_START { \
-                                             gint64 __n1 = (n1), __n2 = (n2); \
+                                             gint64 __n1 = (gint64) (n1), __n2 = (gint64) (n2); \
                                              if (__n1 cmp __n2) ; else \
                                                g_assertion_message_cmpnum (G_LOG_DOMAIN, __FILE__, __LINE__, G_STRFUNC, \
                                                  #n1 " " #cmp " " #n2, (long double) __n1, #cmp, (long double) __n2, 'i'); \
                                         } G_STMT_END
 #define g_assert_cmpuint(n1, cmp, n2)   G_STMT_START { \
-                                             guint64 __n1 = (n1), __n2 = (n2); \
+                                             guint64 __n1 = (guint64) (n1), __n2 = (guint64) (n2); \
                                              if (__n1 cmp __n2) ; else \
                                                g_assertion_message_cmpnum (G_LOG_DOMAIN, __FILE__, __LINE__, G_STRFUNC, \
                                                  #n1 " " #cmp " " #n2, (long double) __n1, #cmp, (long double) __n2, 'i'); \
