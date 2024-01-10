@@ -173,8 +173,16 @@ try_conversion (const char *to_codeset,
 
   if (*cd == (iconv_t)-1 && errno == EINVAL)
     return FALSE;
-  else
-    return TRUE;
+
+#if defined(__FreeBSD__) && defined(ICONV_SET_ILSEQ_INVALID)
+  /* On FreeBSD request GNU iconv compatible handling of characters that cannot
+   * be repesented in the destination character set.
+   * See https://github.com/freebsd/freebsd-src/commit/7c5b23111c5fd1992
+   */
+  int value = 1;
+  (void)iconvctl(*cd, ICONV_SET_ILSEQ_INVALID, &value);
+#endif
+  return TRUE;
 }
 
 static gboolean
