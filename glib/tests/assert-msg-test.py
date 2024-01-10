@@ -37,6 +37,8 @@ set confirm off
 set print elements 0
 set auto-load safe-path /
 run
+# For some reason CHERI GDB fails to load share library symbols
+sharedlibrary
 print *((char**) &__glib_assert_msg)
 quit
 """
