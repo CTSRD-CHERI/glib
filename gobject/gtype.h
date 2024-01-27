@@ -421,11 +421,15 @@ G_BEGIN_DECLS
  * A numerical value which represents the unique identifier of a registered
  * type.
  */
+#if defined(__CHERI_PURE_CAPABILITY__)
+typedef guintptr                        GType;
+#else
 #if     GLIB_SIZEOF_SIZE_T != GLIB_SIZEOF_LONG || !defined (G_CXX_STD_VERSION)
 typedef gsize                           GType;
 #else   /* for historic reasons, C++ links against gulong GTypes */
 typedef gulong                          GType;
 #endif
+#endif // defined(__CHERI_PURE_CAPABILITY__)
 typedef struct _GValue                  GValue;
 typedef union  _GTypeCValue             GTypeCValue;
 typedef struct _GTypePlugin             GTypePlugin;
@@ -1897,7 +1901,7 @@ guint     g_type_get_type_registration_serial (void);
  * GType
  * gtk_gadget_get_type (void)
  * {
- *   static gsize static_g_define_type_id = 0;
+ *   static guintptr static_g_define_type_id = 0;
  *   if (g_once_init_enter (&static_g_define_type_id))
  *     {
  *       GType g_define_type_id =
@@ -2174,7 +2178,7 @@ type_name##_get_instance_private (TypeName *self) \
 GType \
 type_name##_get_type (void) \
 { \
-  static gsize static_g_define_type_id = 0;
+  static guintptr static_g_define_type_id = 0;
   /* Prelude goes here */
 
 /* Added for _G_DEFINE_TYPE_EXTENDED_WITH_PRELUDE */
@@ -2222,7 +2226,7 @@ static void     type_name##_default_init        (TypeName##Interface *klass); \
 GType \
 type_name##_get_type (void) \
 { \
-  static gsize static_g_define_type_id = 0; \
+  static guintptr static_g_define_type_id = 0; \
   if (g_once_init_enter (&static_g_define_type_id)) \
     { \
       GType g_define_type_id = \
@@ -2348,7 +2352,7 @@ static GType type_name##_get_type_once (void); \
 GType \
 type_name##_get_type (void) \
 { \
-  static gsize static_g_define_type_id = 0; \
+  static guintptr static_g_define_type_id = 0; \
   if (g_once_init_enter (&static_g_define_type_id)) \
     { \
       GType g_define_type_id = type_name##_get_type_once (); \
@@ -2385,7 +2389,7 @@ static GType type_name##_get_type_once (void); \
 GType \
 type_name##_get_type (void) \
 { \
-  static gsize static_g_define_type_id = 0; \
+  static guintptr static_g_define_type_id = 0; \
   if (g_once_init_enter (&static_g_define_type_id)) \
     { \
       GType g_define_type_id = type_name##_get_type_once (); \
@@ -2438,7 +2442,7 @@ static GType type_name##_get_type_once (void); \
 GType \
 type_name##_get_type (void) \
 { \
-  static gsize static_g_define_type_id = 0; \
+  static guintptr static_g_define_type_id = 0; \
   if (g_once_init_enter (&static_g_define_type_id)) \
     { \
       GType g_define_type_id = type_name##_get_type_once (); \

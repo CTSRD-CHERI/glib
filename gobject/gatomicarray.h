@@ -34,9 +34,13 @@ typedef union _GAtomicArrayMetadata
    * store any object. With C11 this would be max_align_t, but in practise
    * gpointer is sufficient for all known architectures. We could change
    * this to `_Alignas(max_align_t) char pad` once we depend on C11. */
+#if defined(__CHERI_PURE_CAPABILITY__)
+  _Alignas(max_align_t) char pad;
+#else // defined(__CHERI_PURE_CAPABILITY__)
   gpointer _alignment_padding;
+#endif // defined(__CHERI_PURE_CAPABILITY__)
 } GAtomicArrayMetadata;
-#define G_ATOMIC_ARRAY_DATA_SIZE(mem) (((GAtomicArrayMetadata *) (mem) - 1)->size)
+#define G_ATOMIC_ARRAY_DATA_SIZE(mem) (*(gsize *)((guintptr) mem - MAX(sizeof(gsize), sizeof(gintptr)))) 
 
 typedef struct _GAtomicArray GAtomicArray;
 struct _GAtomicArray {

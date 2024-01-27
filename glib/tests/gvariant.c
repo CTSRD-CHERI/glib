@@ -22,6 +22,10 @@
 #include <stdlib.h>
 #include <glib.h>
 
+#if defined(__CHERI_PURE_CAPABILITY__)
+#include <stdalign.h>
+#endif // defined(__CHERI_PURE_CAPABILITY__)
+
 #define BASIC "bynqiuxthdsog?"
 #define N_BASIC (G_N_ELEMENTS (BASIC) - 1)
 

@@ -1445,7 +1445,7 @@ skip_async_thread (GTask        *task,
                    GCancellable *cancellable)
 {
   GInputStream *stream = source_object;
-  gsize count = GPOINTER_TO_SIZE (task_data);
+  gsize count = (gsize) GPOINTER_TO_GUINTPTR(task_data);
   GInputStreamClass *class;
   GError *error = NULL;
   gssize ret;
@@ -1534,7 +1534,7 @@ g_input_stream_real_skip_async (GInputStream        *stream,
       /* Read is thread-using async fallback.
        * Make skip use threads too, so that we can use a possible sync skip
        * implementation. */
-      g_task_set_task_data (task, GSIZE_TO_POINTER (count), NULL);
+      g_task_set_task_data (task, GUINTPTR_TO_GPOINTER (count), NULL);
 
       g_task_run_in_thread (task, skip_async_thread);
       g_object_unref (task);

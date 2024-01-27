@@ -1698,7 +1698,7 @@ g_regex_new (const gchar         *pattern,
 {
   GRegex *regex;
   pcre2_code *re;
-  static gsize initialised = 0;
+  static guintptr initialised = 0;
   uint32_t pcre_compile_options;
   uint32_t pcre_match_options;
   uint32_t newline_options;

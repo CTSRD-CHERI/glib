@@ -185,7 +185,7 @@ G_DEFINE_BOXED_TYPE (GPatternSpec, g_pattern_spec, g_pattern_spec_copy, g_patter
 GType
 g_strv_get_type (void)
 {
-  static gsize static_g_define_type_id = 0;
+  static guintptr static_g_define_type_id = 0;
 
   if (g_once_init_enter (&static_g_define_type_id))
     {

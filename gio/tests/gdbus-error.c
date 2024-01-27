@@ -198,7 +198,7 @@ GDBusErrorEntry test_error_entries[] =
 static void
 test_register_error (void)
 {
-  gsize test_error_quark = 0;
+  guintptr test_error_quark = 0;
   gboolean res;
   gchar *msg;
   GError *error;
