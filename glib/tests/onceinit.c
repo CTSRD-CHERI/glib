@@ -59,7 +59,7 @@ assert_singleton_execution3 (void)
 static void
 initializer1 (void)
 {
-  static gsize initialized = 0;
+  static guintptr initialized = 0;
   if (g_once_init_enter (&initialized))
     {
       gsize initval = 42;
@@ -71,7 +71,7 @@ initializer1 (void)
 static gpointer
 initializer2 (void)
 {
-  static gsize initialized = 0;
+  static guintptr initialized = 0;
   if (g_once_init_enter (&initialized))
     {
       void *pointer_value = &dummy_value;
@@ -84,7 +84,7 @@ initializer2 (void)
 static void
 initializer3 (void)
 {
-  static gsize initialized = 0;
+  static guintptr initialized = 0;
   if (g_once_init_enter (&initialized))
     {
       gsize initval = 42;
@@ -119,7 +119,7 @@ tmain_call_initializer3 (gpointer user_data)
       static void                                       \
       test_initializer_##N (void)                       \
       {                                                 \
-        static gsize initialized = 0;                   \
+        static guintptr initialized = 0;                   \
         if (g_once_init_enter (&initialized))           \
           {                                             \
             g_free (g_strdup_printf ("cpuhog%5d", 1));  \

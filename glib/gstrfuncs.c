@@ -328,7 +328,7 @@ const guint16 * const g_ascii_table = ascii_table_data;
 static locale_t
 get_C_locale (void)
 {
-  static gsize initialized = FALSE;
+  static guintptr initialized = FALSE;
   static locale_t C_locale = NULL;
 
   if (g_once_init_enter (&initialized))

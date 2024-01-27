@@ -379,10 +379,10 @@ g_vfs_get_default (void)
 GVfs *
 g_vfs_get_local (void)
 {
-  static gsize vfs = 0;
+  static guintptr vfs = 0;
 
   if (g_once_init_enter (&vfs))
-    g_once_init_leave (&vfs, (gsize)_g_local_vfs_new ());
+    g_once_init_leave (&vfs, _g_local_vfs_new ());
 
   return G_VFS (vfs);
 }

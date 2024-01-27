@@ -274,6 +274,8 @@ msort_r (void *b, size_t n, size_t s, GCompareDataFunc cmp, void *arg)
 	    p.var = 1;
 	  else if ((s & (sizeof (void *) - 1)) == 0
 		   && (gsize) (guintptr) b % G_ALIGNOF(void *) == 0)
+	  //else if ((s == (sizeof (unsigned long)))
+		//   && (guintptr) b % ALIGNOF_UNSIGNED_LONG == 0)
 	    p.var = 2;
 	}
       msort_with_tmp (&p, b, n);

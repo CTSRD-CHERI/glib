@@ -542,7 +542,7 @@ gpointer
  *
  * Since: 2.30
  **/
-gssize
+gintptr
 (g_atomic_pointer_add) (volatile void *atomic,
                         gssize         val)
 {
@@ -569,7 +569,7 @@ gssize
  *
  * Since: 2.30
  **/
-gsize
+guintptr
 (g_atomic_pointer_and) (volatile void *atomic,
                         gsize          val)
 {
@@ -596,7 +596,7 @@ gsize
  *
  * Since: 2.30
  **/
-gsize
+guintptr
 (g_atomic_pointer_or) (volatile void *atomic,
                        gsize          val)
 {
@@ -623,7 +623,7 @@ gsize
  *
  * Since: 2.30
  **/
-gsize
+guintptr
 (g_atomic_pointer_xor) (volatile void *atomic,
                         gsize          val)
 {
@@ -1112,12 +1112,12 @@ gpointer
   return oldval;
 }
 
-gssize
+guintptr
 (g_atomic_pointer_add) (volatile void *atomic,
                         gssize         val)
 {
-  gssize *ptr = atomic;
-  gssize oldval;
+  gpointer *ptr = atomic;
+  guintptr oldval;
 
   pthread_mutex_lock (&g_atomic_lock);
   oldval = *ptr;
@@ -1127,46 +1127,46 @@ gssize
   return oldval;
 }
 
-gsize
+guintptr
 (g_atomic_pointer_and) (volatile void *atomic,
                         gsize          val)
 {
-  gsize *ptr = atomic;
-  gsize oldval;
+  gpointer *ptr = atomic;
+  guintptr oldval;
 
   pthread_mutex_lock (&g_atomic_lock);
-  oldval = *ptr;
-  *ptr = oldval & val;
+  oldval = (guintptr) *ptr;
+  *ptr = (gpointer) (oldval & val);
   pthread_mutex_unlock (&g_atomic_lock);
 
   return oldval;
 }
 
-gsize
+guintptr
 (g_atomic_pointer_or) (volatile void *atomic,
                        gsize          val)
 {
-  gsize *ptr = atomic;
-  gsize oldval;
+  gpointer *ptr = atomic;
+  guintptr oldval;
 
   pthread_mutex_lock (&g_atomic_lock);
-  oldval = *ptr;
-  *ptr = oldval | val;
+  oldval = (guintptr) *ptr;
+  *ptr = (gpointer) (oldval | val);
   pthread_mutex_unlock (&g_atomic_lock);
 
   return oldval;
 }
 
-gsize
+guintptr
 (g_atomic_pointer_xor) (volatile void *atomic,
                         gsize          val)
 {
-  gsize *ptr = atomic;
-  gsize oldval;
+  gpointer *ptr = atomic;
+  guintptr oldval;
 
   pthread_mutex_lock (&g_atomic_lock);
-  oldval = *ptr;
-  *ptr = oldval ^ val;
+  oldval = (guintptr) *ptr;
+  *ptr = (gpointer) (oldval ^ val);
   pthread_mutex_unlock (&g_atomic_lock);
 
   return oldval;
