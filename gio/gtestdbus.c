@@ -119,7 +119,7 @@ _g_object_unref_and_wait_weak_notify (gpointer object)
 static void
 _g_test_watcher_add_pid (GPid pid)
 {
-  static gsize started = 0;
+  static guintptr started = 0;
   HANDLE job;
 
   if (g_once_init_enter (&started))
@@ -237,7 +237,7 @@ watch_parent (gint fd)
 static GIOChannel *
 watcher_init (void)
 {
-  static gsize started = 0;
+  static guintptr started = 0;
   static GIOChannel *channel = NULL;
   int errsv;
 

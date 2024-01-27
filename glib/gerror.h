@@ -108,7 +108,7 @@ GQuark                                                                  \
 error_type ## _quark (void)                                             \
 {                                                                       \
   static GQuark q;                                                      \
-  static gsize initialized = 0;                                         \
+  static guintptr initialized = 0;                                      \
                                                                         \
   if (g_once_init_enter (&initialized))                                 \
     {                                                                   \

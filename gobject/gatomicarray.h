@@ -25,7 +25,7 @@
 
 G_BEGIN_DECLS
 
-#define G_ATOMIC_ARRAY_DATA_SIZE(mem) (*((gsize *) (mem) - 1))
+#define G_ATOMIC_ARRAY_DATA_SIZE(mem) (*(gsize *)((guintptr) mem - MAX(sizeof(gsize), sizeof(gintptr)))) 
 
 typedef struct _GAtomicArray GAtomicArray;
 struct _GAtomicArray {

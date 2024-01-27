@@ -429,9 +429,9 @@ void
 
  contended:
     {
-      gsize *pointer_address = address_nonvolatile;
+      gpointer pointer_address = address_nonvolatile;
       gsize mask = 1u << lock_bit;
-      gsize v;
+      gpointer v;
 
       v = (gsize) g_atomic_pointer_get (pointer_address);
       if (v & mask)
@@ -445,9 +445,9 @@ void
     }
     goto retry;
 #else
-  gsize *pointer_address = address_nonvolatile;
-  gsize mask = 1u << lock_bit;
-  gsize v;
+  gpointer *pointer_address = address_nonvolatile;
+  guintptr mask = 1u << lock_bit;
+  guintptr v;
 
  retry:
   v = g_atomic_pointer_or (pointer_address, mask);
@@ -504,9 +504,9 @@ gboolean
     return result;
 #else
     void *address_nonvolatile = (void *) address;
-    gsize *pointer_address = address_nonvolatile;
-    gsize mask = 1u << lock_bit;
-    gsize v;
+    gpointer *pointer_address = address_nonvolatile;
+    guintptr mask = 1u << lock_bit;
+    guintptr v;
 
     g_return_val_if_fail (lock_bit < 32, FALSE);
 
@@ -548,8 +548,8 @@ void
                       : "r" (address), "r" ((gsize) lock_bit)
                       : "cc", "memory");
 #else
-    gsize *pointer_address = address_nonvolatile;
-    gsize mask = 1u << lock_bit;
+    gpointer *pointer_address = address_nonvolatile;
+    guintptr mask = 1u << lock_bit;
 
     g_atomic_pointer_and (pointer_address, ~mask);
 #endif

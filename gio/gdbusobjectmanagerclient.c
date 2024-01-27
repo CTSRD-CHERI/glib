@@ -1535,7 +1535,7 @@ add_interfaces (GDBusObjectManagerClient *manager,
 {
   GDBusObjectProxy *op;
   gboolean added;
-  GVariantIter iter;
+  GVariantIter iter __attribute__ ((__aligned__(16)));
   const gchar *interface_name;
   GVariant *properties;
   GList *interface_added_signals, *l;

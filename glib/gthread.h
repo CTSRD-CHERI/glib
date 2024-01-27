@@ -232,7 +232,7 @@ GLIB_AVAILABLE_IN_ALL
 gboolean        g_once_init_enter               (volatile void  *location);
 GLIB_AVAILABLE_IN_ALL
 void            g_once_init_leave               (volatile void  *location,
-                                                 gsize           result);
+                                                 gpointer result);
 
 /* Use C11-style atomic extensions to check the fast path for status=ready. If
  * they are not available, fall back to using a mutex and condition variable in
@@ -252,6 +252,12 @@ void            g_once_init_leave               (volatile void  *location,
 # define g_once(once, func, arg) g_once_impl ((once), (func), (arg))
 #endif
 
+#if defined(__CHERI_PURE_CAPABILITY__)
+# define g_once_init_enter(location) \
+  (g_once_init_enter((location)))
+# define g_once_init_leave(location, result) \
+  (g_once_init_leave((location), (gpointer) (result)))
+#else // defined(__CHERI_PURE_CAPABILITY__)
 #ifdef __GNUC__
 # define g_once_init_enter(location) \
   (G_GNUC_EXTENSION ({                                               \
@@ -272,6 +278,7 @@ void            g_once_init_leave               (volatile void  *location,
 # define g_once_init_leave(location, result) \
   (g_once_init_leave((location), (gsize) (result)))
 #endif
+#endif // defined(__CHERI_PURE_CAPABILITY__)
 
 GLIB_AVAILABLE_IN_2_36
 guint          g_get_num_processors (void);

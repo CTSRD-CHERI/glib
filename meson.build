@@ -1598,6 +1598,7 @@ endif
 
 if voidp_size == int_size
   glibconfig_conf.set('glib_intptr_type_define', 'int')
+  glibconfig_conf.set('glib_uintptr_type_define', 'unsigned int')
   glibconfig_conf.set_quoted('gintptr_modifier', '')
   glibconfig_conf.set_quoted('gintptr_format', 'i')
   glibconfig_conf.set_quoted('guintptr_format', 'u')
@@ -1605,6 +1606,7 @@ if voidp_size == int_size
   glibconfig_conf.set('glib_gpui_cast', '(guint)')
 elif voidp_size == long_size
   glibconfig_conf.set('glib_intptr_type_define', 'long')
+  glibconfig_conf.set('glib_uintptr_type_define', 'unsigned long')
   glibconfig_conf.set_quoted('gintptr_modifier', 'l')
   glibconfig_conf.set_quoted('gintptr_format', 'li')
   glibconfig_conf.set_quoted('guintptr_format', 'lu')
@@ -1612,11 +1614,28 @@ elif voidp_size == long_size
   glibconfig_conf.set('glib_gpui_cast', '(gulong)')
 elif voidp_size == long_long_size
   glibconfig_conf.set('glib_intptr_type_define', 'long long')
+  glibconfig_conf.set('glib_uintptr_type_define', 'unsigned long long')
   glibconfig_conf.set_quoted('gintptr_modifier', int64_m)
   glibconfig_conf.set_quoted('gintptr_format', int64_m + 'i')
   glibconfig_conf.set_quoted('guintptr_format', int64_m + 'u')
   glibconfig_conf.set('glib_gpi_cast', '(gint64)')
   glibconfig_conf.set('glib_gpui_cast', '(guint64)')
+# elif voidp_size == 16 
+elif cc.compiles('''#ifndef __CHERI_PURE_CAPABILITY__
+                    #error "Not purecap CHERI"
+                    #endif
+                    int main (void)
+                    {
+                      return 0;
+                    }''',
+                    name : 'targetting pure-capability CHERI')
+  glibconfig_conf.set('glib_intptr_type_define', 'intptr_t')
+  glibconfig_conf.set('glib_uintptr_type_define', 'uintptr_t')
+  glibconfig_conf.set_quoted('gintptr_modifier', 'P')
+  glibconfig_conf.set_quoted('gintptr_format', 'Pi')
+  glibconfig_conf.set_quoted('guintptr_format', 'Pu')
+  glibconfig_conf.set('glib_gpi_cast', '(intptr_t)') # TODO
+  glibconfig_conf.set('glib_gpui_cast', '(uintptr_t)') # TODO
 else
   error('Could not determine size of void *')
 endif
@@ -2373,6 +2392,8 @@ endif
 
 test_timeout = 60
 test_timeout_slow = 180
+
+libutil = [cc.find_library('util', required : true)]
 
 pkg = import('pkgconfig')
 windows = import('windows')

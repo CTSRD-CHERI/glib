@@ -636,7 +636,7 @@ g_file_enumerator_iterate (GFileEnumerator  *direnum,
 
   static GQuark cached_info_quark;
   static GQuark cached_child_quark;
-  static gsize quarks_initialized;
+  static guintptr quarks_initialized;
 
   g_return_val_if_fail (direnum != NULL, FALSE);
   g_return_val_if_fail (out_info != NULL || out_child != NULL, FALSE);

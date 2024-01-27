@@ -249,9 +249,11 @@
 #define BIG_ENTRY_SIZE (SIZEOF_VOID_P)
 #define SMALL_ENTRY_SIZE (SIZEOF_INT)
 
+#if !defined(__CHERI_PURE_CAPABILITY__)
 #if SMALL_ENTRY_SIZE < BIG_ENTRY_SIZE
 # define USE_SMALL_ARRAYS
 #endif
+#endif // !defined(__CHERI_PURE_CAPABILITY__)
 
 struct _GHashTable
 {
@@ -290,7 +292,7 @@ typedef struct
   gpointer     dummy2;
   gint         position;
   gboolean     dummy3;
-  gint         version;
+  guintptr     version;
 } RealIter;
 
 G_STATIC_ASSERT (sizeof (GHashTableIter) == sizeof (RealIter));
@@ -389,7 +391,7 @@ g_hash_table_fetch_key_or_value (gpointer a, guint index, gboolean is_big)
 #ifndef USE_SMALL_ARRAYS
   is_big = TRUE;
 #endif
-  return is_big ? *(((gpointer *) a) + index) : GUINT_TO_POINTER (*(((guint *) a) + index));
+  return is_big ? *((gpointer *) ((guintptr) a + (index * sizeof(gpointer *)))) : (gpointer) ((gintptr) a + (index * sizeof(guint)));
 }
 
 static inline void

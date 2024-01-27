@@ -121,7 +121,7 @@
 GType
 g_binding_flags_get_type (void)
 {
-  static gsize static_g_define_type_id = 0;
+  static guintptr static_g_define_type_id = 0;
 
   if (g_once_init_enter (&static_g_define_type_id))
     {

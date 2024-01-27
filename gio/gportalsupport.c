@@ -27,7 +27,7 @@ static gboolean dconf_access;
 static void
 read_flatpak_info (void)
 {
-  static gsize flatpak_info_read = 0;
+  static guintptr flatpak_info_read = 0;
   const gchar *path = "/.flatpak-info";
 
   if (!g_once_init_enter (&flatpak_info_read))

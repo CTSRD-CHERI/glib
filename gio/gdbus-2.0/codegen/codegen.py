@@ -4918,7 +4918,7 @@ class CodeGenerator:
             "{\n" % (self.ns_lower)
         )
         self.outfile.write(
-            "  static gsize once_init_value = 0;\n"
+            "  static gintptr once_init_value = 0;\n"
             "  static GHashTable *lookup_hash;\n"
             "  GType ret;\n"
             "\n"
@@ -4931,12 +4931,12 @@ class CodeGenerator:
         )
         for i in self.ifaces:
             self.outfile.write(
-                '      g_hash_table_insert (lookup_hash, (gpointer) "%s", GSIZE_TO_POINTER (%sTYPE_%s_PROXY));\n'
+                '      g_hash_table_insert (lookup_hash, (gpointer) "%s", GUINTPTR_TO_GPOINTER (%sTYPE_%s_PROXY));\n'
                 % (i.name, i.ns_upper, i.name_upper)
             )
         self.outfile.write("      g_once_init_leave (&once_init_value, 1);\n" "    }\n")
         self.outfile.write(
-            "  ret = (GType) GPOINTER_TO_SIZE (g_hash_table_lookup (lookup_hash, interface_name));\n"
+            "  ret = (GType) GPOINTER_TO_GINTPTR (g_hash_table_lookup (lookup_hash, interface_name));\n"
             "  if (ret == (GType) 0)\n"
             "    ret = G_TYPE_DBUS_PROXY;\n"
         )

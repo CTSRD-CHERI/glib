@@ -292,7 +292,7 @@ gdbus_shared_thread_func (gpointer user_data)
 static SharedThreadData *
 _g_dbus_shared_thread_ref (void)
 {
-  static gsize shared_thread_data = 0;
+  static guintptr shared_thread_data = 0;
   SharedThreadData *ret;
 
   if (g_once_init_enter (&shared_thread_data))
@@ -308,7 +308,7 @@ _g_dbus_shared_thread_ref (void)
                                    gdbus_shared_thread_func,
                                    data);
       /* We can cast between gsize and gpointer safely */
-      g_once_init_leave (&shared_thread_data, (gsize) data);
+      g_once_init_leave (&shared_thread_data, (guintptr) data);
     }
 
   ret = (SharedThreadData*) shared_thread_data;
@@ -1943,7 +1943,7 @@ _g_dbus_debug_print_unlock (void)
 void
 _g_dbus_initialize (void)
 {
-  static gsize initialized = 0;
+  static guintptr initialized = 0;
 
   if (g_once_init_enter (&initialized))
     {

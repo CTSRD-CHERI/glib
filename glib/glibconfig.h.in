@@ -10,6 +10,7 @@
 
 #include <limits.h>
 #include <float.h>
+#include <stdint.h>
 #mesondefine GLIB_HAVE_ALLOCA_H
 
 /* Specifies that GLib's g_print*() functions wrap the
@@ -103,8 +104,8 @@ typedef gint64 goffset;
 #define GINT_TO_POINTER(i)	((gpointer) @glib_gpi_cast@ (i))
 #define GUINT_TO_POINTER(u)	((gpointer) @glib_gpui_cast@ (u))
 
-typedef signed @glib_intptr_type_define@ gintptr;
-typedef unsigned @glib_intptr_type_define@ guintptr;
+typedef @glib_intptr_type_define@ gintptr;
+typedef @glib_uintptr_type_define@ guintptr;
 
 #define G_GINTPTR_MODIFIER      @gintptr_modifier@
 #define G_GINTPTR_FORMAT        @gintptr_format@

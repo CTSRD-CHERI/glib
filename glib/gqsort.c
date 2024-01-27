@@ -270,7 +270,7 @@ msort_r (void *b, size_t n, size_t s, GCompareDataFunc cmp, void *arg)
 	  else if (s == sizeof (guint64)
 		   && (guintptr) b % ALIGNOF_GUINT64 == 0)
 	    p.var = 1;
-	  else if ((s & (sizeof (unsigned long) - 1)) == 0
+	  else if ((s == (sizeof (unsigned long)))
 		   && (guintptr) b % ALIGNOF_UNSIGNED_LONG == 0)
 	    p.var = 2;
 	}

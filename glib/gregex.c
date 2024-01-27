@@ -1305,7 +1305,7 @@ g_regex_new (const gchar         *pattern,
   pcre *re;
   const gchar *errmsg;
   gboolean optimize = FALSE;
-  static gsize initialised = 0;
+  static guintptr initialised = 0;
 
   g_return_val_if_fail (pattern != NULL, NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);

@@ -95,7 +95,7 @@ _glib_get_locale_dir (void)
 static void
 ensure_gettext_initialized (void)
 {
-  static gsize initialised;
+  static guintptr initialised;
 
   if (g_once_init_enter (&initialised))
     {
@@ -302,7 +302,7 @@ g_dpgettext2 (const gchar *domain,
 static gboolean
 _g_dgettext_should_translate (void)
 {
-  static gsize translate = 0;
+  static guintptr translate = 0;
   enum {
     SHOULD_TRANSLATE = 1,
     SHOULD_NOT_TRANSLATE = 2

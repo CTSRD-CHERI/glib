@@ -18,6 +18,10 @@
 #include <stdlib.h>
 #include <glib.h>
 
+#if defined(__CHERI_PURE_CAPABILITY__)
+#include <stdalign.h>
+#endif // defined(__CHERI_PURE_CAPABILITY__)
+
 #define BASIC "bynqiuxthdsog?"
 #define N_BASIC (G_N_ELEMENTS (BASIC) - 1)
 
@@ -1333,7 +1337,11 @@ align_malloc (gsize size)
   gpointer mem;
 
 #ifdef HAVE_POSIX_MEMALIGN
+#if defined(__CHERI_PURE_CAPABILITY__)
+  if (posix_memalign (&mem, alignof(max_align_t), size))
+#else // defined(__CHERI_PURE_CAPABILITY__)
   if (posix_memalign (&mem, 8, size))
+#endif // defined(__CHERI_PURE_CAPABILITY__)
     g_error ("posix_memalign failed");
 #else
   /* NOTE: there may be platforms that lack posix_memalign() and also

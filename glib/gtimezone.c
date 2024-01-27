@@ -1965,7 +1965,7 @@ GTimeZone *
 g_time_zone_new_utc (void)
 {
   static GTimeZone *utc = NULL;
-  static gsize initialised;
+  static guintptr initialised;
 
   if (g_once_init_enter (&initialised))
     {

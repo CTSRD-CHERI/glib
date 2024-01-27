@@ -2767,7 +2767,7 @@ g_log_writer_default (GLogLevelFlags   log_level,
                       gsize            n_fields,
                       gpointer         user_data)
 {
-  static gsize initialized = 0;
+  static guintptr initialized = 0;
   static gboolean stderr_is_journal = FALSE;
 
   g_return_val_if_fail (fields != NULL, G_LOG_WRITER_UNHANDLED);

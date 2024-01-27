@@ -128,7 +128,7 @@ test_once_multi_threaded (void)
 static void
 test_once_init_single_threaded (void)
 {
-  static gsize init = 0;
+  static guintptr init = 0;
 
   g_test_summary ("Test g_once_init_{enter,leave}() usage from a single thread");
 
@@ -152,7 +152,7 @@ static gint64 shared;
 static void
 init_shared (void)
 {
-  static gsize init = 0;
+  static guintptr init = 0;
 
   if (g_once_init_enter (&init))
     {

@@ -517,7 +517,7 @@ type_node_any_new_W (TypeNode             *pnode,
   node->global_gdata = NULL;
   g_hash_table_insert (static_type_nodes_ht,
 		       (gpointer) g_quark_to_string (node->qname),
-		       (gpointer) type);
+		       (gpointer) (guintptr) type);
 
   g_atomic_int_inc ((gint *)&type_registration_serial);
 

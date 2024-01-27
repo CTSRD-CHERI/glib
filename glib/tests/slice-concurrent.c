@@ -40,6 +40,7 @@ static void *
 thread_func (void *arg)
 {
   int i;
+  unsigned int seed = time(NULL);
   struct ThreadData *td = arg;
 
   for (i = 0; i < N_ALLOCS; i++)
@@ -55,7 +56,7 @@ thread_func (void *arg)
       mem = g_slice_alloc (bytes);
 
       for (f = 0; f < bytes; f++)
-        mem[f] = rand();
+        mem[f] = rand_r(&seed);
 
       /* associate block with random thread */
       t = rand() % N_THREADS;
