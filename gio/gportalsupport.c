@@ -64,7 +64,7 @@ snap_plug_is_connected (const gchar *plug_name)
 static void
 sandbox_info_read (void)
 {
-  static gsize sandbox_info_is_read = 0;
+  static guintptr sandbox_info_is_read = 0;
 
   /* Sandbox type and Flatpak info is static, so only read once */
   if (!g_once_init_enter (&sandbox_info_is_read))
