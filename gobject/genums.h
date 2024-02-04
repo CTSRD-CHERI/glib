@@ -320,7 +320,7 @@ void	g_flags_complete_type_info (GType	       g_flags_type,
 #define G_DEFINE_ENUM_TYPE(TypeName, type_name, ...) \
 GType \
 type_name ## _get_type (void) { \
-  static gsize g_define_type__static = 0; \
+  static guintptr g_define_type__static = 0; \
   if (g_once_init_enter (&g_define_type__static)) { \
     static const GEnumValue enum_values[] = { \
       __VA_ARGS__ , \
@@ -363,7 +363,7 @@ type_name ## _get_type (void) { \
 #define G_DEFINE_FLAGS_TYPE(TypeName, type_name, ...) \
 GType \
 type_name ## _get_type (void) { \
-  static gsize g_define_type__static = 0; \
+  static guintptr g_define_type__static = 0; \
   if (g_once_init_enter (&g_define_type__static)) { \
     static const GFlagsValue flags_values[] = { \
       __VA_ARGS__ , \
