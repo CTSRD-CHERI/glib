@@ -2383,6 +2383,8 @@ if want_systemtap and enable_dtrace
   enable_systemtap = true
 endif
 
+libutil = [cc.find_library('util', required : true)]
+
 pkg = import('pkgconfig')
 windows = import('windows')
 subdir('tools')
