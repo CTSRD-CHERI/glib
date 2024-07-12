@@ -236,9 +236,9 @@ GLIB_AVAILABLE_IN_ALL
 void            g_once_init_leave               (volatile void  *location,
                                                  gsize           result);
 
-GLIB_AVAILABLE_IN_2_80
+GLIB_AVAILABLE_IN_2_76
 gboolean g_once_init_enter_pointer              (void *location);
-GLIB_AVAILABLE_IN_2_80
+GLIB_AVAILABLE_IN_2_76
 void g_once_init_leave_pointer                  (void *location,
                                                  gpointer result);
 
@@ -280,13 +280,13 @@ void g_once_init_leave_pointer                  (void *location,
     (void) (0 ? (gpointer) * (location) : NULL);               \
     (!g_atomic_pointer_get (location) &&                       \
      g_once_init_enter_pointer (location));                    \
-  })) GLIB_AVAILABLE_MACRO_IN_2_80
+  })) GLIB_AVAILABLE_MACRO_IN_2_76
 # define g_once_init_leave_pointer(location, result)                        \
   (G_GNUC_EXTENSION ({                                                      \
     G_STATIC_ASSERT (sizeof *(location) == sizeof (gpointer));              \
     0 ? (void) (*(location) = (result)) : (void) 0;                         \
     g_once_init_leave_pointer ((location), (gpointer) (guintptr) (result)); \
-  })) GLIB_AVAILABLE_MACRO_IN_2_80
+  })) GLIB_AVAILABLE_MACRO_IN_2_76
 #else
 # define g_once_init_enter(location) \
   (g_once_init_enter((location)))
@@ -294,10 +294,10 @@ void g_once_init_leave_pointer                  (void *location,
   (g_once_init_leave((location), (gsize) (result)))
 # define g_once_init_enter_pointer(location) \
   (g_once_init_enter_pointer((location))) \
-  GLIB_AVAILABLE_MACRO_IN_2_80
+  GLIB_AVAILABLE_MACRO_IN_2_76
 # define g_once_init_leave_pointer(location, result) \
   (g_once_init_leave_pointer((location), (gpointer) (guintptr) (result))) \
-  GLIB_AVAILABLE_MACRO_IN_2_80
+  GLIB_AVAILABLE_MACRO_IN_2_76
 #endif
 
 GLIB_AVAILABLE_IN_2_36

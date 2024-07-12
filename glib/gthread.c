@@ -754,7 +754,7 @@ gboolean
  * Returns: %TRUE if the initialization section should be entered,
  *     %FALSE and blocks otherwise
  *
- * Since: 2.80
+ * Since: 2.80 (2.76 in CheriBSD)
  */
 gboolean
 (g_once_init_enter_pointer) (gpointer location)
@@ -834,7 +834,7 @@ void
  * This functions behaves in the same way as g_once_init_leave(), but
  * can be used to initialize pointers (or #guintptr) instead of #gsize.
  *
- * Since: 2.80
+ * Since: 2.80 (2.76 in CheriBSD)
  */
 void
 (g_once_init_leave_pointer) (gpointer location,
