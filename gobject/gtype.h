@@ -2155,15 +2155,15 @@ static void     type_name##_class_intern_init (gpointer klass) \
 }
 #endif /* GLIB_VERSION_MAX_ALLOWED >= GLIB_VERSION_2_38 */
 
-#if GLIB_VERSION_MAX_ALLOWED >= GLIB_VERSION_2_80
+#if GLIB_VERSION_MAX_ALLOWED >= GLIB_VERSION_2_76
 #define _g_type_once_init_type GType
 #define _g_type_once_init_enter g_once_init_enter_pointer
 #define _g_type_once_init_leave g_once_init_leave_pointer
-#else  /* if GLIB_VERSION_MAX_ALLOWED < GLIB_VERSION_2_80 */
+#else  /* if GLIB_VERSION_MAX_ALLOWED < GLIB_VERSION_2_76 */
 #define _g_type_once_init_type gsize
 #define _g_type_once_init_enter g_once_init_enter
 #define _g_type_once_init_leave g_once_init_leave
-#endif  /* GLIB_VERSION_MAX_ALLOWED >= GLIB_VERSION_2_80 */
+#endif  /* GLIB_VERSION_MAX_ALLOWED >= GLIB_VERSION_2_76 */
 
 /* Added for _G_DEFINE_TYPE_EXTENDED_WITH_PRELUDE */
 #define _G_DEFINE_TYPE_EXTENDED_BEGIN_PRE(TypeName, type_name, TYPE_PARENT) \
@@ -2605,9 +2605,9 @@ const gchar *    g_type_name_from_class         (GTypeClass	*g_class);
  * This macro should be used instead of GPOINTER_TO_SIZE() to ensure
  * portability since #GType is not guaranteed to be the same as #gsize.
  *
- * Since: 2.80
+ * Since: 2.80 (2.76 in CheriBSD)
  */
-#define GPOINTER_TO_TYPE(p) ((GType) (guintptr) (p)) GOBJECT_AVAILABLE_MACRO_IN_2_80
+#define GPOINTER_TO_TYPE(p) ((GType) (guintptr) (p)) GOBJECT_AVAILABLE_MACRO_IN_2_76
 /**
  * GTYPE_TO_POINTER:
  * @t: The #GType to convert to a pointer
@@ -2615,9 +2615,9 @@ const gchar *    g_type_name_from_class         (GTypeClass	*g_class);
  * This macro should be used instead of GSIZE_TO_POINTER() to ensure
  * portability since #GType is not guaranteed to be the same as #gsize.
  *
- * Since: 2.80
+ * Since: 2.80 (2.76 in CheriBSD)
  */
-#define GTYPE_TO_POINTER(t) ((gpointer) (guintptr) (t)) GOBJECT_AVAILABLE_MACRO_IN_2_80
+#define GTYPE_TO_POINTER(t) ((gpointer) (guintptr) (t)) GOBJECT_AVAILABLE_MACRO_IN_2_76
 
 G_END_DECLS
 

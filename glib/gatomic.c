@@ -538,8 +538,9 @@ gpointer
  * While @atomic has a `volatile` qualifier, this is a historical artifact and
  * the pointer passed to it should not be `volatile`.
  *
- * In GLib 2.80, the return type was changed from #gssize to #gintptr to add
- * support for platforms with 128-bit pointers. This should not affect existing
+ * In GLib 2.80 (2.76 in CheriBSD), the return type was changed from #gssize to
+ * #gintptr to add support for platforms with 128-bit pointers. This should not
+ * affect existing
  * code.
  *
  * Returns: the value of @atomic before the add, signed
@@ -569,9 +570,9 @@ gintptr
  * While @atomic has a `volatile` qualifier, this is a historical artifact and
  * the pointer passed to it should not be `volatile`.
  *
- * In GLib 2.80, the return type was changed from #gsize to #guintptr to add
- * support for platforms with 128-bit pointers. This should not affect existing
- * code.
+ * In GLib 2.80 (2.76 in CheriBSD), the return type was changed from #gsize to
+ * #guintptr to add support for platforms with 128-bit pointers. This should not
+ * affect existing code.
  *
  * Returns: the value of @atomic before the operation, unsigned
  *
@@ -600,9 +601,9 @@ guintptr
  * While @atomic has a `volatile` qualifier, this is a historical artifact and
  * the pointer passed to it should not be `volatile`.
  *
- * In GLib 2.80, the return type was changed from #gsize to #guintptr to add
- * support for platforms with 128-bit pointers. This should not affect existing
- * code.
+ * In GLib 2.80 (2.76 in CheriBSD), the return type was changed from #gsize to
+ * #guintptr to add support for platforms with 128-bit pointers. This should not
+ * affect existing code.
  *
  * Returns: the value of @atomic before the operation, unsigned
  *
@@ -631,9 +632,9 @@ guintptr
  * While @atomic has a `volatile` qualifier, this is a historical artifact and
  * the pointer passed to it should not be `volatile`.
  *
- * In GLib 2.80, the return type was changed from #gsize to #guintptr to add
- * support for platforms with 128-bit pointers. This should not affect existing
- * code.
+ * In GLib 2.80 (2.76 in CheriBSD), the return type was changed from #gsize to
+ * #guintptr to add support for platforms with 128-bit pointers. This should not
+ * affect existing code.
  *
  * Returns: the value of @atomic before the operation, unsigned
  *
